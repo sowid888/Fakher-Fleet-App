@@ -1,0 +1,24 @@
+{
+  "fleet_database": {
+    "system_rules": {
+      "require_odometer_image": true,
+      "auto_timestamp": true,
+      "app_version": "2600.1.0"
+    },
+    "approved_trucks": {
+      "TRUCK_2600_001": {
+        "truck_id": "2600-001",
+        "chassis_number": "JAAKP34H2D7P06865",
+        "vehicle_type": "Truck",
+        "current_odometer": 150000,
+        "unread_notifications_count": 0,
+        "logs": {
+          "fuel_records": {},
+          "maintenance_records": {},
+          "fault_reports": {},
+          "messages": {}
+        }
+      }
+    }
+  }
+}

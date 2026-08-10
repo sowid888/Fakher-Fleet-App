@@ -1,0 +1,255 @@
+{
+    "bg_type": "color",
+    "bg_color": "#4a0e17",
+    "bg_image_path": "",
+    "theme_colors": {
+        "header_bg": "#2b080d",
+        "header_fg": "#ffea00",
+        "btn_bg": "#1b4332",
+        "btn_fg": "#ffffff",
+        "btn_border": "#d4af37",
+        "btn_hover": "#2d6a4f"
+    },
+    "buttons": [
+        {
+            "id": 1,
+            "title": "🚚 هوية الشاحنات\n(100 شاحنة)",
+            "path": "D:/Fakher_Truck_Identity_2600.PY",
+            "type": "script"
+        },
+        {
+            "id": 2,
+            "title": "🚗 هوية السيارات\n(100 سيارة)",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 3,
+            "title": "⛽ وقود الشاحنات",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 4,
+            "title": "⛽ وقود السيارات",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 5,
+            "title": "🛠️ صيانة الشاحنات",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 6,
+            "title": "🛠️ صيانة السيارات",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 7,
+            "title": "📡 واجهة البلاغات الحية",
+            "path": "",
+            "type": "tracking"
+        },
+        {
+            "id": 8,
+            "title": "📩 رسائل وتنبيهات النظام",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 9,
+            "title": "🛞 فحص وتتبع الإطارات",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 10,
+            "title": "🚛 نظافة وجدولة الشاحنات",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 11,
+            "title": "🤖 مستشار الذكاء الاصطناعي",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 12,
+            "title": "⚙️ خادم الربط السيادي",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 13,
+            "title": "📊 التقارير المالية والإدارية",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 14,
+            "title": "➕ مفتاح مخصص 14",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 15,
+            "title": "➕ مفتاح مخصص 15",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 16,
+            "title": "➕ مفتاح مخصص 16",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 17,
+            "title": "➕ مفتاح مخصص 17",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 18,
+            "title": "➕ مفتاح مخصص 18",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 19,
+            "title": "➕ مفتاح مخصص 19",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 20,
+            "title": "➕ مفتاح مخصص 20",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 21,
+            "title": "➕ مفتاح مخصص 21",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 22,
+            "title": "➕ مفتاح مخصص 22",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 23,
+            "title": "➕ مفتاح مخصص 23",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 24,
+            "title": "➕ مفتاح مخصص 24",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 25,
+            "title": "➕ مفتاح مخصص 25",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 26,
+            "title": "➕ مفتاح مخصص 26",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 27,
+            "title": "➕ مفتاح مخصص 27",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 28,
+            "title": "➕ مفتاح مخصص 28",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 29,
+            "title": "➕ مفتاح مخصص 29",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 30,
+            "title": "➕ مفتاح مخصص 30",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 31,
+            "title": "➕ مفتاح مخصص 31",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 32,
+            "title": "➕ مفتاح مخصص 32",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 33,
+            "title": "➕ مفتاح مخصص 33",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 34,
+            "title": "➕ مفتاح مخصص 34",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 35,
+            "title": "➕ مفتاح مخصص 35",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 36,
+            "title": "➕ مفتاح مخصص 36",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 37,
+            "title": "➕ مفتاح مخصص 37",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 38,
+            "title": "➕ مفتاح مخصص 38",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 39,
+            "title": "➕ مفتاح مخصص 39",
+            "path": "",
+            "type": "script"
+        },
+        {
+            "id": 40,
+            "title": "➕ مفتاح مخصص 40",
+            "path": "",
+            "type": "script"
+        }
+    ]
+}

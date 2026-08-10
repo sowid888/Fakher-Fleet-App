@@ -1,0 +1,54 @@
+import sqlite3
+import os
+
+# البرمجية تكتشف مجلد العمل الحالي تلقائياً في القرص D
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "Fakher_Central_Database_2600.db")
+
+def build_central_database():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    # جدول الشاحنات الرئيسي
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS Truck_Main_Registry_2600 (
+            truck_id TEXT PRIMARY KEY,
+            chassis_number TEXT,
+            plate_number TEXT,
+            truck_model TEXT,
+            max_tonnage REAL,
+            status TEXT DEFAULT 'نشط',
+            notes TEXT
+        )
+    ''')
+
+    # جدول السيارات
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS Cars_Registry_2600 (
+            car_id TEXT PRIMARY KEY,
+            chassis_number TEXT,
+            plate_number TEXT,
+            car_model TEXT,
+            assigned_driver TEXT,
+            status TEXT DEFAULT 'نشط'
+        )
+    ''')
+
+    # جدول الصيانة والعمليات
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS Maintenance_Logs_2600 (
+            log_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            vehicle_id TEXT,
+            operation_type TEXT,
+            odometer_reading REAL,
+            operation_date DATE,
+            notes TEXT
+        )
+    ''')
+
+    conn.commit()
+    conn.close()
+    print(f"✅ تم إنشاء الخزنة المركزية بنجاح داخل مجلد المشروع في القرص D:\n{DB_PATH}")
+
+if __name__ == "__main__":
+    build_central_database()

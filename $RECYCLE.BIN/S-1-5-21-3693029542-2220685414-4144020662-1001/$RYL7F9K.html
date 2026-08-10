@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مؤسسة الجوزي للتجارة العامة والتوكيلات - قطاع الحركة والنقل</title>
+    <style>
+        :root {
+            --primary: #1A237E;
+            --secondary: #0D47A1;
+            --accent: #C62828;
+            --bg: #F8F9FA;
+            --card-bg: #FFFFFF;
+            --text: #333333;
+            --gray: #757575;
+        }
+        body { font-family: system-ui, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 12px; direction: rtl; }
+        .container { max-width: 600px; margin: 0 auto; padding-bottom: 40px; }
+        .header { text-align: center; margin-bottom: 16px; background: var(--primary); color: white; padding: 16px; border-radius: 12px; }
+        .header h1 { font-size: 18px; margin: 0 0 4px 0; }
+        .header p { font-size: 13px; margin: 0; opacity: 0.9; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 13px; font-weight: bold; margin-bottom: 4px; color: var(--primary); }
+        .form-control { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        .btn { width: 100%; border: none; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; font-size: 15px; margin-top: 8px; text-align: center; }
+        .btn-primary { background-color: var(--primary); color: white; }
+        .btn-danger { background-color: var(--accent); color: white; }
+        .btn-outline { background: transparent; color: var(--primary); border: 1px solid var(--primary); margin-top: 6px; }
+        .hidden { display: none !important; }
+        .grid-menu { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
+        .alert-error { color: var(--accent); font-size: 13px; font-weight: bold; text-align: center; margin-top: 6px; }
+        .fault-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 12px; }
+        .fault-btn { background: #E3F2FD; border: 1px solid #90CAF9; padding: 10px; border-radius: 6px; text-align: right; cursor: pointer; font-weight: bold; color: var(--primary); }
+        .fault-btn:hover { background: #BBDEFB; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginScreen" class="card">
+        <div class="header">
+            <h1>مؤسسة الجوزي للتجارة العامة والتوكيلات</h1>
+            <p>قطاع الحركة والنقل</p>
+        </div>
+        <div class="form-group">
+            <label>نوع المركبة</label>
+            <select id="vehicleTypeSelect" class="form-control" onchange="toggleVehicleFields()">
+                <option value="TRUCK">شاحنة</option>
+                <option value="CAR">سيارة (ديزل / بنزين / هجين / كهربائي)</option>
+            </select>
+        </div>
+
+        <div id="carSubtypeGroup" class="form-group hidden">
+            <label>فئة محرك السيارة</label>
+            <select id="carSubtypeSelect" class="form-control">
+                <option value="PETROL">بنزين تقليدي</option>
+                <option value="DIESEL">ديزل خفيف</option>
+                <option value="HYBRID">هجين (Hybrid)</option>
+                <option value="EV_PLUGIN">كهربائي بمنفذ شحن (Plug-in EV)</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label id="lblPlate">رقم اللوحة المعدنية للشاحنة</label>
+            <input type="text" id="txtPlate" class="form-control" placeholder="أدخل رقم اللوحة">
+        </div>
+        <div class="form-group">
+            <label id="lblDriver">اسم السائق</label>
+            <input type="text" id="txtDriver" class="form-control" placeholder="أدخل اسم السائق">
+        </div>
+        <div class="form-group">
+            <label>الرقم الإداري</label>
+            <input type="text" id="txtAdminId" class="form-control" placeholder="الرقم الإداري">
+        </div>
+        <div class="form-group">
+            <label>الرقم السري (يُطلب لمرة واحدة)</label>
+            <input type="password" id="txtPin" class="form-control" placeholder="أدخل الرقم السري المعتمد">
+        </div>
+        
+        <div id="loginError" class="alert-error hidden">خطأ في الإدخال أو الرقم السري غير صحيح! يძى المحاولة بدقة.</div>
+
+        <button class="btn btn-primary" onclick="handleLogin()">إرسال ومطابقة البيانات</button>
+        <button class="btn btn-outline" onclick="alert('تم إغلاق التطبيق')">خروج من التطبيق</button>
+    </div>
+
+    <!-- الشاشة الرئيسية للخيارات -->
+    <div id="mainDashboard" class="card hidden">
+        <div class="header">
+            <h1 id="mainTitle">لوحة التحكم - الأسطول</h1>
+            <p id="mainSubtitle">مرحباً بك في النظام الميداني</p>
+        </div>
+        <div class="grid-menu">
+            <button class="btn btn-primary" onclick="showSection('sectionOdoFuel')">إرسال قراءة العداد وتعبئة الوقود/الشحن</button>
+            <button class="btn btn-outline" onclick="showSection('sectionMailbox')">صندوق البريد</button>
+            <button class="btn btn-outline" onclick="showSection('sectionFaults')">بلاغات الأعطال</button>
+            <button class="btn btn-outline" onclick="showSection('sectionMaintenance')">تسجيل إصلاحات وصيانة</button>
+            <button class="btn btn-outline" onclick="showSection('sectionComplaints')">تسجيل الشكاوى والمقترحات</button>
+            <button class="btn btn-danger" onclick="logout()">العودة للشاشة السابقة (تسجيل الخروج)</button>
+        </div>
+    </div>
+
+    <!-- قسم قراءة العداد وتعبئة الوقود -->
+    <div id="sectionOdoFuel" class="card hidden">
+        <h3>قراءة العداد وتعبئة الوقود / الطاقة</h3>
+        <button class="btn btn-primary" onclick="showSection('subOdo')">إرسال قراءة العداد (ODO)</button>
+        <button class="btn btn-primary" onclick="showSection('subFuel')">تسجيل تعبئة الوقود أو الطاقة</button>
+        <button class="btn btn-outline" onclick="showSection('mainDashboard')">العودة للشاشة السابقة</button>
+    </div>
+
+    <!-- فرع قراءة العداد -->
+    <div id="subOdo" class="card hidden">
+        <h3>قراءة العداد الآلية واليدوية</h3>
+        <button class="btn btn-primary" onclick="startOdoCamera()">تصوير بالكاميرا وقراءة النص (Auto OCR)</button>
+        <div class="form-group" style="margin-top: 10px;">
+            <label>إدخال قراءة العداد يدوي (ODO حصراً وتجاهل TRIP):</label>
+            <input type="number" id="manualOdoInput" class="form-control" placeholder="أدخل رقم العداد ODO">
+        </div>
+        <button class="btn btn-primary" onclick="submitOdo()">إرسال القراءة للسيرفر</button>
+        <p id="ocrResultDisplay" style="font-weight:bold; color:var(--primary); text-align:center; margin-top:8px;"></p>
+        <button class="btn btn-outline" onclick="showSection('sectionOdoFuel')">العودة للشاشة السابقة</button>
+    </div>
+
+    <!-- فرع تعبئة الوقود -->
+    <div id="subFuel" class="card hidden">
+        <h3>تعبئة الوقود / الشحن الكهربائي</h3>
+        <div class="form-group">
+            <label>كمية الوقود باللتر (0 إلى 150 لتر) أو نسبة الشحن:</label>
+            <input type="number" id="fuelAmount" class="form-control" min="0" max="150" placeholder="0 - 150">
+        </div>
+        <div class="form-group">
+            <label>رقم الفاتورة:</label>
+            <input type="text" id="invoiceNo" class="form-control" placeholder="رقم الفاتورة">
+        </div>
+        <div class="form-group">
+            <label>اسم محطة التعبئة (اختياري):</label>
+            <input type="text" id="stationName" class="form-control" placeholder="اختياري">
+        </div>
+        <button class="btn btn-primary" onclick="submitFuel()">إرسال كبير</button>
+        <button class="btn btn-outline" onclick="showSection('sectionOdoFuel')">العودة للشاشة السابقة</button>
+    </div>
+
+    <!-- قسم بلاغات الأعطال -->
+    <div id="sectionFaults" class="card hidden">
+        <h3>بلاغات الأعطال الفنية</h3>
+        <div class="grid-menu">
+            <button class="btn btn-primary" onclick="openFaultCategory('MECHANICAL')">أعطال ميكانيكية</button>
+            <button class="btn btn-primary" onclick="openFaultCategory('ELECTRICAL')">أعطال كهربائية / هجين / شحن</button>
+            <button class="btn btn-primary" onclick="openFaultCategory('FRIDGE')">أعطال الثلاجة</button>
+            <button class="btn btn-primary" onclick="openFaultCategory('BRAKES')">أعطال البريك والاطارات</button>
+        </div>
+        <button class="btn btn-outline" onclick="showSection('mainDashboard')" style="margin-top: 15px;">العودة للشاشة السابقة</button>
+    </div>
+
+    <!-- تفصيلي الأعطال -->
+    <div id="subFaultList" class="card hidden">
+        <h3 id="faultCategoryTitle">اختر العطل المحدد</h3>
+        <div id="faultOptionsContainer" class="fault-grid"></div>
+        <div class="form-group">
+            <label>عطل آخر أو تفاصيل إضافية:</label>
+            <input type="text" id="otherFaultText" class="form-control" placeholder="اكتب التفاصيل هنا">
+        </div>
+        <button class="btn btn-primary" onclick="submitFault()">إرسال البلاغ</button>
+        <button class="btn btn-outline" onclick="showSection('sectionFaults')">العودة للشاشة السابقة</button>
+    </div>
+
+    <!-- قسم الشكاوى والمقترحات -->
+    <div id="sectionComplaints" class="card hidden">
+        <h3>تسجيل الشكاوى والمقترحات</h3>
+        
+        <!-- حقل الكتابة -->
+        <div class="form-group">
+            <label>حقل الكتابة (أكثر من 3 أسطر):</label>
+            <textarea id="complaintText" class="form-control" rows="4" placeholder="اكتب الشكوى أو الملاحظات النصية..."></textarea>
+            <button class="btn btn-primary" onclick="submitComplaintText()">إرسال النص</button>
+        </div>
+
+        <!-- حقل التسجيل الصوتي -->
+        <div class="form-group" style="border-top: 1px solid #ddd; padding-top: 10px;">
+            <label>تسجيل صوتي (بحد أقصى 60 ثانية):</label>
+            <button class="btn btn-outline" id="btnRecord" onclick="toggleRecordAudio()">بدء التسجيل الصوتي</button>
+            <p id="recordTimer" style="text-align:center; font-size:12px; color:var(--gray);">المدة: 00 / 60 ثانية</p>
+            <button class="btn btn-primary hidden" id="btnSendAudio" onclick="submitAudio()">إرسال التسجيل الصوتي</button>
+        </div>
+
+        <!-- حقل كاميرا الشكاوى -->
+        <div class="form-group" style="border-top: 1px solid #ddd; padding-top: 10px;">
+            <label>كاميرا الشكاوى (حتى 10 صور أو فيديوهات قصيرة):</label>
+            <input type="file" id="complaintFiles" class="form-control" accept="image/*,video/*" multiple onchange="handleMediaFiles(this)">
+            <p id="mediaCount" style="font-size: 12px; color: var(--gray);">تم اختيار 0 ملف (الحد الأقصى 10)</p>
+            <button class="btn btn-primary" onclick="submitMediaFiles()">إرسال الوسائط</button>
+        </div>
+
+        <button class="btn btn-danger" onclick="showSection('mainDashboard')">العودة للشاشة السابقة</button>
+    </div>
+
+    <!-- صندوق البريد -->
+    <div id="sectionMailbox" class="card hidden">
+        <h3>صندوق البريد والتنبيهات</h3>
+        <p style="color: var(--gray); text-align: center;">لا توجد رسائل جديدة حالياً من السيرفر.</p>
+        <button class="btn btn-outline" onclick="showSection('mainDashboard')">العودة للشاشة السابقة</button>
+    </div>
+
+    <!-- تسجيل اصلاحات وصيانة -->
+    <div id="sectionMaintenance" class="card hidden">
+        <h3>تسجيل إصلاحات وصيانة</h3>
+        <div class="form-group">
+            <label>نوع الصيانة أو الإصلاح:</label>
+            <input type="text" class="form-control" placeholder="مثل: تغيير إطارات، صيانة دورية، تغيير زيت...">
+        </div>
+        <button class="btn btn-primary" onclick="alert('تم حفظ وإرسال تقرير الصيانة بنجاح')">إرسال تقرير الصيانة</button>
+        <button class="btn btn-outline" onclick="showSection('mainDashboard')">العودة للشاشة السابقة</button>
+    </div>
+
+</div>
+
+<script>
+    let currentVehicleData = {};
+    let recordedSeconds = 0;
+    let isRecording = false;
+    let recordInterval = null;
+    let selectedMediaList = [];
+
+    function toggleVehicleFields() {
+        const type = document.getElementById('vehicleTypeSelect').value;
+        const lblPlate = document.getElementById('lblPlate');
+        const lblDriver = document.getElementById('lblDriver');
+        const subGroup = document.getElementById('carSubtypeGroup');
+
+        if (type === 'TRUCK') {
+            lblPlate.innerText = "رقم اللوحة المعدنية للشاحنة";
+            lblDriver.innerText = "اسم السائق للشاحنة";
+            subGroup.classList.add('hidden');
+        } else {
+            lblPlate.innerText = "رقم اللوحة المعدنية للسيارة";
+            lblDriver.innerText = "اسم السائق للسيارة";
+            subGroup.classList.remove('hidden');
+        }
+    }
+
+    function handleLogin() {
+        const plate = document.getElementById('txtPlate').value.trim();
+        const driver = document.getElementById('txtDriver').value.trim();
+        const adminId = document.getElementById('txtAdminId').value.trim();
+        const pin = document.getElementById('txtPin').value.trim();
+        const errDiv = document.getElementById('loginError');
+
+        if (!plate || !driver || !adminId || !pin) {
+            errDiv.innerText = "لقد حدث خطأ في أحد الحقول أو الحقول فارغة!";
+            errDiv.classList.remove('hidden');
+            return;
+        }
+
+        // محاكاة التحقق من الرقم السري (يتطلب الرقم الصحيح المعتمد من مشغل النظام)
+        if (pin !== "1234") { // مثال للرقم السري أو يتم التحقق عبر السيرفر
+            errDiv.innerText = "الرقم السري غير صحيح! لا يمكن فتح البرنامج إلا بكلمة السر الصحيحة.";
+            errDiv.classList.remove('hidden');
+            return;
+        }
+
+        errDiv.classList.add('hidden');
+        currentVehicleData.type = document.getElementById('vehicleTypeSelect').value;
+        currentVehicleData.plate = plate;
+        currentVehicleData.driver = driver;
+
+        document.getElementById('mainTitle').innerText = `نظام الجوزي - ${currentVehicleData.type === 'TRUCK' ? 'شاحنة' : 'سيارة'} (${plate})`;
+        document.getElementById('mainSubtitle').innerText = `السائق: ${driver}`;
+
+        showSection('mainDashboard');
+    }
+
+    function logout() {
+        document.getElementById('txtPin').value = '';
+        showSection('loginScreen');
+    }
+
+    function showSection(sectionId) {
+        const sections = [
+            'loginScreen', 'mainDashboard', 'sectionOdoFuel', 'subOdo', 
+            'subFuel', 'sectionFaults', 'subFaultList', 'sectionComplaints', 
+            'sectionMailbox', 'sectionMaintenance'
+        ];
+        sections.forEach(id => {
+            document.getElementById(id).classList.add('hidden');
+        });
+        document.getElementById(sectionId).classList.remove('hidden');
+    }
+
+    function startOdoCamera() {
+        // محاكاة استشعار قراءة الكاميرا وتطبيق فلترة Regex لضمان أخذ ODO وتجاهل TRIP
+        const simulatedText = "TRIP 12.5 - ODO 458920";
+        const odoMatch = simulatedText.match(/ODO\s*([0-9]{3,7})/i);
+        
+        if (odoMatch) {
+            const detectedOdo = odoMatch[1];
+            document.getElementById('manualOdoInput').value = detectedOdo;
+            document.getElementById('ocrResultDisplay').innerText = `تم التقاط العداد بنجاح (ODO): ${detectedOdo} كم (تم تجاهل الـ TRIP)`;
+        } else {
+            document.getElementById('ocrResultDisplay').innerText = "لم يتم العثور على قراءة ODO بوضوح، يجدر الإدخال اليدوي.";
+        }
+    }
+
+    function submitOdo() {
+        const val = document.getElementById('manualOdoInput').value;
+        if(!val) { alert('الرجاء إدخال أو تصوير القراءة أولاً'); return; }
+        alert('تم إرسال قراءة العداد بنجاح إلى سيرفر النظام.');
+        showSection('sectionOdoFuel');
+    }
+
+    function submitFuel() {
+        const amt = document.getElementById('fuelAmount').value;
+        if(amt < 0 || amt > 150) { alert('كمية الوقود يجب أن تكون بين 0 و 150 لتر'); return; }
+        alert('تم توثيق وإرسال كمية الوقود والفاتورة بنجاح.');
+        showSection('sectionOdoFuel');
+    }
+
+    // قواعد البيانات الخاصة بالأعطال
+    const faultData = {
+        MECHANICAL: [
+            "لا يوجد عزم", "استهلاك مرتفع للديزل / البنزين", "تأخير في التشغيل", 
+            "صوت في المحرك غريب", "ارتفاع حرارة المحرك", "تهريب ماء تانكي التبريد", 
+            "تهريب زيت من المحرك", "سير المروحة أو الدينمو يصدر صوت أو مقطوع", 
+            "عند إطفاء المحرك يحدث صوت غريب", "المحرك يهتز بشكل كبير", 
+            "السبيد يسرب الزيت", "دواسة الكلش هابطة", "ظهور إشارات في الطبلون", "أخرى"
+        ],
+        ELECTRICAL: [
+            "البطاريات ضعيفة في الصباح", "أصابع البطاريات تالفة", "النور الأمامي الجهة اليمنى لا يعمل", 
+            "النور الأمامي الجهة اليسرى لا يعمل", "النور الخلفي إشارة الانعطاف لا يعمل يمين / شمال", 
+            "النور الخلفي للطبلون لا يعمل", "الهون (كلاكس / البوري) لا يعمل", "بيت الشاحن لا يعمل", 
+            "جهاز الإنذار لا يعمل", "الزجاج لا يقفل", "المساحات لا تعمل", "المساحات تالفة", "نور الغمارة لا يعمل"
+        ],
+        FRIDGE: [
+            "تهريب ماء من سقف الثلاجة", "تهريب ماء من الباب الخلفي", "تهريب ماء من الباب الجانبي", 
+            "الإضاءة لا تعمل", "لا يوجد أقفال أبواب للثلاجة", "ذراعات باب تأمين الثلاجة معطلة", 
+            "جهاز تحكم تشغيل الثلاجة معطل", "الثلاجة لا تقوم بالتبريد", "سير كمبريسر مقطوع أو تالف أو مرتخي"
+        ],
+        BRAKES: [
+            "البريك ضعيف", "تهريب سائل بريك من الجهة الأمامية شمال تحت الراكب", 
+            "تهريب سائل بريك من الجهة الأمامية يمن تحت السائق", "تهريب سائل البريك من الجهة الخلفية جهة الراكب", 
+            "تهريب سائل البريك جهة الخلفية جهة السائق", "عند الضغط على المكابح يرتفع صوت", 
+            "تهريب زيت السبيِد", "تهريب زيت الدفرنس", "الإطار الأمامي جهة السائق تفرغ بسرعة", 
+            "الإطار الأمامي جهة الراكب تفرغ بسرعة", "الإطارات الخلفية جهة الراكب تالفة", 
+            "الإطارات الخلفية جهة السائق تالفة", "لا يوجد رافعة دنقلس أو معطل أو مفتاح الإطارات"
+        ]
+    };
+
+    function openFaultCategory(categoryKey) {
+        showSection('subFaultList');
+        const titles = {
+            MECHANICAL: "الأعطال الميكانيكية",
+            ELECTRICAL: "الأعطال الكهربائية والهجينة",
+            FRIDGE: "أعطال الثلاجة",
+            BRAKES: "أعطال البريك والإطارات"
+        };
+        document.getElementById('faultCategoryTitle').innerText = titles[categoryKey];
+        const container = document.getElementById('faultOptionsContainer');
+        container.innerHTML = '';
+
+        faultData[categoryKey].forEach(item => {
+            const btn = document.createElement('button');
+            btn.className = 'fault-btn';
+            btn.innerText = item;
+            btn.onclick = () => {
+                document.querySelectorAll('.fault-btn').forEach(b => b.style.background = '#E3F2FD');
+                btn.style.background = '#90CAF9';
+                currentVehicleData.selectedFault = item;
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    function submitFault() {
+        alert('تم إرسال بلاغ العطل بنجاح إلى سيرفر النظام.');
+        showSection('sectionFaults');
+    }
+
+    function submitComplaintText() {
+        const text = document.getElementById('complaintText').value;
+        if(text.length < 5) { alert('الرجاء كتابة تفاصيل الشكوى بشكل كافٍ'); return; }
+        alert('تم إرسال الشكوى النصية بنجاح.');
+    }
+
+    function toggleRecordAudio() {
+        const btn = document.getElementById('btnRecord');
+        const sendBtn = document.getElementById('btnSendAudio');
+        const timer = document.getElementById('recordTimer');
+
+        if (!isRecording) {
+            isRecording = true;
+            recordedSeconds = 0;
+            btn.innerText = "إيقاف التسجيل المؤقت / إنهاء";
+            btn.style.background = "#FFCDD2";
+            sendBtn.classList.add('hidden');
+            
+            recordInterval = setInterval(() => {
+                recordedSeconds++;
+                timer.innerText = `جاري التسجيل... ${recordedSeconds} / 60 ثانية`;
+                if (recordedSeconds >= 60) {
+                    toggleRecordAudio();
+                }
+            }, 1000);
+        } else {
+            isRecording = false;
+            clearInterval(recordInterval);
+            btn.innerText = "إعادة التسجيل أو البدء من جديد";
+            btn.style.background = "";
+            sendBtn.classList.remove('hidden');
+            timer.innerText = `تم تسجيل مقطع صوتي بطول ${recordedSeconds} ثانية.`;
+        }
+    }
+
+    function submitAudio() {
+        alert('تم رفع وإرسال التسجيل الصوتي بنجاح.');
+    }
+
+    function handleMediaFiles(input) {
+        if (input.files.length > 10) {
+            alert('الحد الأقصى المسموح به هو 10 ملفات فقط!');
+            input.value = '';
+            return;
+        }
+        selectedMediaList = input.files;
+        document.getElementById('mediaCount').innerText = `تم اختيار ${selectedMediaList.length} ملف (مسموح حتى 10)`;
+    }
+
+    function submitMediaFiles() {
+        if (selectedMediaList.length === 0) {
+            alert('يرجى اختيار صور أو فيديوهات أولاً');
+            return;
+        }
+        alert('تم إرسال صور وفيديوهات الشكاوى بنجاح إلى السيرفر.');
+    }
+</script>
+
+</body>
+</html>

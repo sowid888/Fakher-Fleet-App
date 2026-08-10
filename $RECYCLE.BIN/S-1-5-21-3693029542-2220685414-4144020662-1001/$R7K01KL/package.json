@@ -1,0 +1,39 @@
+{
+  "name": "com.aljozi.fleet",
+  "version": "1.0.0",
+  "displayName": "مؤسسة الجوزي - قطاع الحركة والنقل",
+  "description": "نظام إدارة الأسطول الميداني وقراءة العدادات والوقود مع المزامنة والتشفير",
+  "main": "index.html",
+  "scripts": {
+    "build": "echo 'Building AlJozi Fleet Web Bundle...'"
+  },
+  "dependencies": {
+    "cordova-plugin-camera": "^7.0.0",
+    "cordova-plugin-mlkit-ocr": "^1.0.0",
+    "opencv-js": "^4.8.0",
+    "cordova-plugin-secure-storage": "^3.0.2",
+    "cordova-plugin-network-information": "^3.0.0",
+    "cordova-plugin-geolocation": "^5.0.0",
+    "cordova-plugin-file": "^8.0.0"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-camera": {},
+      "cordova-plugin-mlkit-ocr": {},
+      "cordova-plugin-secure-storage": {},
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-geolocation": {},
+      "cordova-plugin-file": {}
+    },
+    "platforms": [
+      "android"
+    ]
+  },
+  "android": {
+    "applicationId": "com.aljozi.fleet",
+    "minSdk": 24,
+    "targetSdk": 34,
+    "versionCode": 1,
+    "versionName": "1.0.0"
+  }
+}
