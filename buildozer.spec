@@ -1,25 +1,26 @@
 [app]
 
 # (str) Title of your application
-title = Fakher Fleet
+title = Fleet Control 2600
 
 # (str) Package name
-package.name = fakherfleet
+package.name = fleet2600
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.fakher
+package.domain = com.fleet.app
 
 # (str) Source code where the main.py live
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,json,txt,db,otf,ttf
+source.include_exts = py,png,jpg,kv,atlas,json,txt,db
 
 # (str) Application versioning
 version = 1.0.0
 
 # (list) Application requirements
-requirements = python3,kivy,requests,urllib3,certifi,idna
+# تحديد إصدار بايثون 3.11 لمنع التضارب مع Kivy
+requirements = python3==3.11.0,kivy==2.3.0,requests,urllib3,certifi,idna,firebase-admin
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
 orientation = portrait
@@ -30,7 +31,7 @@ fullscreen = 0
 # (list) Permissions
 android.permissions = INTERNET,ACCESS_NETWORK_STATE,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE
 
-# (int) Target Android API, should be as high as possible.
+# (int) Target Android API
 android.api = 33
 
 # (int) Minimum API required
@@ -42,15 +43,8 @@ android.ndk = 25b
 # (bool) Use --private data storage (True) or --dir public storage (False)
 android.private_storage = True
 
-# (list) List of Java .jar files to add to the libs dir
-#android.add_jars = foo.jar,bar.jar
-
 # (list) The Android architectures to build for
-# تحديد معمارية واحدة فقط لمنع استهلاك الوقت وتوقف البناء
 android.archs = arm64-v8a
-
-# (bool) Enable AndroidX support
-android.gradle_dependencies = 
 
 # (bool) Accept SDK licenses automatically
 android.accept_sdk_license = True
