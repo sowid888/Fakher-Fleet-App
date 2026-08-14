@@ -19,7 +19,6 @@ source.include_exts = py,png,jpg,kv,atlas,json,txt,db
 version = 1.0.0
 
 # (list) Application requirements
-# تحديد إصدار بايثون 3.11 لمنع التضارب مع Kivy
 requirements = python3==3.11.0,kivy==2.3.0,requests,urllib3,certifi,idna,firebase-admin
 
 # (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
