@@ -1,34 +1,34 @@
 [app]
 
 # (str) Title of your application
-title = Fleet Control 2600
+title = Fakher Fleet
 
 # (str) Package name
-package.name = fleet2600
+package.name = fakherfleet
 
-# (str) Package domain (needed for android/ios packaging)
-package.domain = com.fleet.app
+# (str) Package domain
+package.domain = com.fakher.fleet
 
 # (str) Source code where the main.py live
 source.dir = .
 
-# (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas,json,txt,db
+# (list) Source files to include
+source.include_exts = py,png,jpg,kv,atlas,json,db
 
 # (str) Application versioning
 version = 1.0.0
 
 # (list) Application requirements
-requirements = python3==3.11.0,kivy==2.3.0,requests,urllib3,certifi,idna,firebase-admin
+requirements = python3,kivy
 
-# (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
+# (str) Supported orientations
 orientation = portrait
 
-# (bool) Indicate if the application should be fullscreen or not
+# (bool) Fullscreen mode
 fullscreen = 0
 
 # (list) Permissions
-android.permissions = INTERNET,ACCESS_NETWORK_STATE,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE
+android.permissions = INTERNET,ACCESS_NETWORK_STATE
 
 # (int) Target Android API
 android.api = 33
@@ -36,22 +36,22 @@ android.api = 33
 # (int) Minimum API required
 android.minapi = 21
 
-# (str) Android NDK version to use
+# (str) Android NDK version
 android.ndk = 25b
 
-# (bool) Use --private data storage (True) or --dir public storage (False)
+# (bool) Use private storage
 android.private_storage = True
 
-# (list) The Android architectures to build for
+# (list) List of architectures to build for
 android.archs = arm64-v8a
 
-# (bool) Accept SDK licenses automatically
+# (bool) Automatically accept Android SDK licenses
 android.accept_sdk_license = True
 
 [buildozer]
 
-# (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
+# (int) Log level
 log_level = 2
 
-# (int) Display warning if buildozer is run as root (0 = error, 1 = warning)
+# (int) Display warning if run as root
 warn_on_root = 1
