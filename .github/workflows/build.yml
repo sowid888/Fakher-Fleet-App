@@ -28,15 +28,15 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libffi-dev libssl-dev
-        pip install --upgrade pip
-        pip install "cython<3.0.0" buildozer kivy
+        python3 -m pip install --upgrade pip
+        python3 -m pip install "cython==0.29.36" buildozer kivy
 
     - name: Build APK with Buildozer
       run: |
-        yes | buildozer -v android debug
+        buildozer -v android debug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: FleetControl-APK
+        name: FakherFleet-APK
         path: bin/*.apk
