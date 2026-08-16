@@ -19,7 +19,7 @@ source.include_exts = py,png,jpg,kv,atlas,json,db
 version = 1.0.0
 
 # (list) Application requirements
-requirements = python3,kivy==2.3.0
+requirements = python3,kivy==2.2.1
 
 # (str) Supported orientations
 orientation = portrait
@@ -54,4 +54,4 @@ android.accept_sdk_license = True
 log_level = 2
 
 # (int) Display warning if run as root
-warn_on_root = 1
+warn_on_root = 0
