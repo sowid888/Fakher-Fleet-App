@@ -19,7 +19,7 @@ source.include_exts = py,png,jpg,kv,atlas,json,db
 version = 1.0.0
 
 # (list) Application requirements
-requirements = python3,kivy
+requirements = python3==3.10.12,kivy
 
 # (str) Supported orientations
 orientation = portrait
@@ -47,6 +47,9 @@ android.archs = arm64-v8a
 
 # (bool) Automatically accept Android SDK licenses
 android.accept_sdk_license = True
+
+# (str) p4a branch
+p4a.branch = master
 
 [buildozer]
 
