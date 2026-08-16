@@ -1,60 +1,42 @@
-[app]
+name: Build Android APK
 
-# (str) Title of your application
-title = Fakher Fleet
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
 
-# (str) Package name
-package.name = fakherfleet
+jobs:
+  build:
+    runs-on: ubuntu-22.04
 
-# (str) Package domain
-package.domain = com.fakher.fleet
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-# (str) Source code where the main.py live
-source.dir = .
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
 
-# (list) Source files to include
-source.include_exts = py,png,jpg,kv,atlas,json,db
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
 
-# (str) Application versioning
-version = 1.0.0
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libffi-dev libssl-dev
+        python3 -m pip install --upgrade pip setuptools
+        python3 -m pip install "cython==0.29.36" buildozer kivy
 
-# (list) Application requirements
-requirements = python3==3.10.12,kivy
+    - name: Build APK with Buildozer
+      run: |
+        buildozer -v android debug
 
-# (str) Supported orientations
-orientation = portrait
-
-# (bool) Fullscreen mode
-fullscreen = 0
-
-# (list) Permissions
-android.permissions = INTERNET,ACCESS_NETWORK_STATE
-
-# (int) Target Android API
-android.api = 33
-
-# (int) Minimum API required
-android.minapi = 21
-
-# (str) Android NDK version
-android.ndk = 25b
-
-# (bool) Use private storage
-android.private_storage = True
-
-# (list) List of architectures to build for
-android.archs = arm64-v8a
-
-# (bool) Automatically accept Android SDK licenses
-android.accept_sdk_license = True
-
-# (str) p4a branch
-p4a.branch = master
-
-[buildozer]
-
-# (int) Log level
-log_level = 2
-
-# (int) Display warning if run as root
-warn_on_root = 1
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: FakherFleet-APK
+        path: bin/*.apk
