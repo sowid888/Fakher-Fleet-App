@@ -1,95 +1,137 @@
-import requests
+# -*- coding: utf-8 -*-
+"""
+منظومة فاخر السيادية الكبرى 2600 - واجهة الـ 40 مفتاحاً للأندرويد (Kivy)
+المشرف الفني العام: المهندس جمال سويد (أبا عبد الله)
+تاريخ الإصدار: 2026
+"""
+
+import os
 import json
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
+from kivy.uix.scrollview import ScrollView
+from kivy.graphics import Color, Rectangle
 
-# بيانات الاتصال بـ Firebase
-FIREBASE_DATABASE_URL = "https://algazi26-default-rtdb.firebaseio.com"
-
-class FakherDriverApp:
-    def __init__(self, phone_number):
-        self.phone_number = phone_number
-        self.driver_vehicles = []
-        self.selected_vehicle = None
-
-    def fetch_driver_vehicles(self):
-        """الاستعلام من السيرفر لمعرفة المركبات المخصصة لهذا الهاتف"""
-        # استعلام محاكاة لاسترجاع بيانات السائق من قاعدة البيانات
-        # في حال وجود مركبتين مرابطتين بنفس الرقم:
-        if self.phone_number == "0501234567":  # مثال لسائق يملك مركبتين
-            self.driver_vehicles = [
-                {"code": "Truck_101", "name": "🚚 إيسوزو عادي", "plate": "أ ب ج 123"},
-                {"code": "Truck_102", "name": "🚛 إيسوزو تيربو", "plate": "د هـ و 456"}
-            ]
-        else:
-            self.driver_vehicles = [
-                {"code": "Truck_201", "name": "🚚 شاحنة مرسيدس", "plate": "س ص ع 789"}
-            ]
-        return self.driver_vehicles
-
-    def display_ui_doors(self):
-        """تحديد شكل الواجهة بناءً على عدد المركبات"""
-        vehicles = self.fetch_driver_vehicles()
+class FakherFleetAndroidApp(App):
+    def build(self):
+        self.title = "🛡️ منظومة فاخر السيادية 2600"
         
-        if len(vehicles) > 1:
-            print("\n==========================================")
-            print("🛑 مرحباً بك! تم العثور على أكثر من مركبة مسجلة برقمك:")
-            print("يرجى اختيار الباب/المفتاح الخاص بالمركبة الحالية:")
-            for idx, v in enumerate(vehicles, 1):
-                print(f"  [{idx}] {v['name']} (لوحة: {v['plate']})")
-            print("==========================================")
-        else:
-            print(f"\n✅ مرحباً بك! مركبتك المسجلة: {vehicles[0]['name']}")
-            self.selected_vehicle = vehicles[0]
+        # المسار الآمن لحفظ الإعدادات على نظام الأندرويد
+        self.config_path = os.path.join(App.get_running_app().user_data_dir, "Fakher_40_Keys.json")
+        self.buttons_data = self.load_or_create_settings()
 
-    def select_vehicle_door(self, choice_index):
-        """اختيار الباب (المفتاح) من قبل السائق"""
-        if 0 <= choice_index < len(self.driver_vehicles):
-            self.selected_vehicle = self.driver_vehicles[choice_index]
-            print(f"\n👉 تم اختيار: {self.selected_vehicle['name']}")
+        # التخطيط الرئيسي للتطبيق
+        main_layout = BoxLayout(orientation='vertical', spacing=5, padding=5)
 
-    def send_report_with_confirmation(self, odometer_reading, report_text):
-        """شاشة التأكيد المنبثقة قبل رفع البلاغ لسيرفر Firebase"""
-        if not self.selected_vehicle:
-            print("❌ خطأ: لم يتم تحديد المركبة!")
-            return
+        # شريط العنوان العلوي (Header)
+        header = BoxLayout(size_hint_y=0.1, padding=5)
+        with header.canvas.before:
+            Color(0.17, 0.03, 0.05, 1) # اللون العنابي السيادي
+            self.rect_header = Rectangle(size=header.size, pos=header.pos)
+        header.bind(size=self._update_rect, pos=self._update_rect)
 
-        print("\n------------------------------------------")
-        print("⚠️ [شاشة تأكيد إرسال البلاغ المنبثقة]")
-        print(f"• هل أنت متأكد من إرسال البلاغ لـ: {self.selected_vehicle['name']}؟")
-        print(f"• رقم اللوحة: {self.selected_vehicle['plate']}")
-        print(f"• قراءة العداد: {odometer_reading} كم")
-        print(f"• تفاصيل البلاغ: {report_text}")
-        print("------------------------------------------")
+        title_label = Label(
+            text="🛡️ منظومة فاخر السيادية 2600 — أندرويد\n👨‍💻 م. جمال سويد (أبا عبد الله)",
+            font_size='16sp',
+            bold=True,
+            color=(1, 0.92, 0, 1), # اللون الذهبي
+            halign='center'
+        )
+        header.add_widget(title_label)
+        main_layout.add_widget(header)
+
+        # شبكة الـ 40 مفتاحاً مع إمكانية التمرير للأسفل
+        scroll = ScrollView(size_hint=(1, 0.9))
+        grid = GridLayout(cols=4, spacing=8, size_hint_y=None, padding=5)
+        grid.bind(minimum_height=grid.setter('height'))
+
+        for btn_info in self.buttons_data:
+            btn = Button(
+                text=btn_info["title"],
+                font_size='11sp',
+                bold=True,
+                background_normal='',
+                background_color=(0.1, 0.26, 0.2, 1), # اللون الأخضر الزيتي
+                color=(1, 1, 1, 1),
+                size_hint_y=None,
+                height=110,
+                halign='center',
+                valign='middle'
+            )
+            btn.bind(size=btn.setter('text_size'))
+            btn.bind(on_release=lambda instance, b=btn_info: self.on_key_click(b))
+            grid.add_widget(btn)
+
+        scroll.add_widget(grid)
+        main_layout.add_widget(scroll)
+
+        return main_layout
+
+    def _update_rect(self, instance, value):
+        self.rect_header.pos = instance.pos
+        self.rect_header.size = instance.size
+
+    def generate_default_40_buttons(self):
+        defaults = [
+            {"id": 1, "title": "🚚 هوية الشاحنات\n(100 شاحنة)"},
+            {"id": 2, "title": "🚗 هوية السيارات\n(100 سيارة)"},
+            {"id": 3, "title": "⛽ وقود الشاحنات"},
+            {"id": 4, "title": "⛽ وقود السيارات"},
+            {"id": 5, "title": "🛠️ صيانة الشاحنات"},
+            {"id": 6, "title": "🛠️ صيانة السيارات"},
+            {"id": 7, "title": "📡 البلاغات الحية"},
+            {"id": 8, "title": "📩 التنبيهات"},
+            {"id": 9, "title": "🛞 فحص الإطارات"},
+            {"id": 10, "title": "🚛 نظافة الشاحنات"},
+            {"id": 11, "title": "🤖 مستشار AI"},
+            {"id": 12, "title": "⚙️ خادم الربط"},
+            {"id": 13, "title": "📊 التقارير المالية"}
+        ]
+        for i in range(14, 41):
+            defaults.append({"id": i, "title": f"➕ مفتاح {i}"})
+        return defaults
+
+    def load_or_create_settings(self):
+        if os.path.exists(self.config_path):
+            try:
+                with open(self.config_path, "r", encoding="utf-8") as f:
+                    return json.load(f)
+            except Exception:
+                pass
+        defaults = self.generate_default_40_buttons()
+        try:
+            with open(self.config_path, "w", encoding="utf-8") as f:
+                json.dump(defaults, f, ensure_ascii=False, indent=4)
+        except Exception:
+            pass
+        return defaults
+
+    def on_key_click(self, btn_info):
+        content = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        lbl = Label(
+            text=f"تم الضغط على:\n{btn_info['title']}\n\nالقسم جاهز للربط بقاعدة البيانات أو خادم Firebase.",
+            halign='center'
+        )
+        close_btn = Button(
+            text="إغلاق",
+            size_hint_y=0.3,
+            background_color=(0.8, 0.2, 0.2, 1)
+        )
         
-        confirm = input("هل تؤكد الإرسال؟ (اكتب 'نعم' للتأكيد / 'لا' للتعديل): ").strip()
+        content.add_widget(lbl)
+        content.add_widget(close_btn)
 
-        if confirm.lower() in ['نعم', 'yes', 'y']:
-            payload = {
-                "driver_phone": self.phone_number,
-                "vehicle_code": self.selected_vehicle['code'],
-                "vehicle_name": self.selected_vehicle['name'],
-                "plate_number": self.selected_vehicle['plate'],
-                "odometer_reading": odometer_reading,
-                "report_text": report_text,
-                "status": "pending"
-            }
-            
-            # رفع البيانات إلى Firebase Realtime Database
-            response = requests.post(f"{FIREBASE_DATABASE_URL}/Reports.json", json=payload)
-            if response.status_code == 200:
-                print("✅ تم إرسال البلاغ بنجاح إلى سيرفر Firebase!")
-            else:
-                print("🛑 حدث خطأ في الاتصال بالسيرفر.")
-        else:
-            print("🔄 تم إلغاء الإرسال، يمكنك إعادة اختيار المركبة.")
+        popup = Popup(
+            title=f"مفتاح رقم {btn_info['id']}",
+            content=content,
+            size_hint=(0.85, 0.45)
+        )
+        close_btn.bind(on_release=popup.dismiss)
+        popup.open()
 
-# --- تجربة النظام ---
 if __name__ == "__main__":
-    # تشغيل تجريبي برقم هاتف لديه شاحنتين (إيسوزو عادي / إيسوزو تيربو)
-    app = FakherDriverApp(phone_number="0501234567")
-    app.display_ui_doors()
-    
-    # السائق يختار المفتاح الثاني (إيسوزو تيربو)
-    app.select_vehicle_door(1)
-    
-    # إدخال البلاغ وشاشة التأكيد
-    app.send_report_with_confirmation(odometer_reading=85400, report_text="طلب تغيير زيت محرك")
+    FakherFleetAndroidApp().run()
