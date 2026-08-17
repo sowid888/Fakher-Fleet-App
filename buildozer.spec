@@ -19,7 +19,8 @@ source.include_exts = py,png,jpg,kv,atlas,json,db
 version = 1.0.0
 
 # (list) Application requirements
-requirements = python3,kivy==2.3.0
+# تحديد إصدار بايثون المستقر لتجنب بايثون 3.14
+requirements = python3==3.11.0,kivy==2.3.0
 
 # (str) Supported orientations
 orientation = portrait
