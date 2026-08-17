@@ -32,6 +32,8 @@ jobs:
         python -m pip install "cython<3.0.0" buildozer kivy
 
     - name: Clean & Build APK with Buildozer
+      env:
+        APP_ALLOW_RUNNING_AS_ROOT: 1
       run: |
         rm -rf .buildozer
         yes | buildozer distclean
