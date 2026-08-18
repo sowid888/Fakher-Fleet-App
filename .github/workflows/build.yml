@@ -29,12 +29,14 @@ jobs:
         sudo apt update
         sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libffi-dev libssl-dev build-essential libsqlite3-dev sqlite3 libgdbm-dev libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev
         python -m pip install --upgrade pip setuptools
-        python -m pip install "cython<3.0.0" buildozer kivy
-        python -m pip install "python-for-android<2024.1.0"
+        python -m pip install "cython<3.0.0"
+        python -m pip install git+https://github.com/kivy/buildozer.git@master
+        python -m pip install git+https://github.com/kivy/python-for-android.git@v2024.01.21
 
     - name: Build APK with Buildozer
       env:
         APP_ALLOW_RUNNING_AS_ROOT: 1
+        P4A_RELEASE_KEY: v2024.01.21
       run: |
         buildozer -v android debug
 
