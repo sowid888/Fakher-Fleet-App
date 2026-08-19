@@ -25,9 +25,11 @@ jobs:
         java-version: '17'
 
     - name: Install System Dependencies
+      env:
+        DEBIAN_FRONTEND: noninteractive
       run: |
-        sudo apt update
-        sudo apt install -y git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libffi-dev libssl-dev build-essential libsqlite3-dev sqlite3 libgdbm-dev libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev
+        sudo apt-get update -y
+        sudo apt-get install -y -qq git zip unzip openjdk-17-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libffi-dev libssl-dev build-essential libsqlite3-dev sqlite3 libgdbm-dev libdb5.3-dev libbz2-dev libexpat1-dev liblzma-dev tk-dev
         python -m pip install --upgrade pip setuptools
         python -m pip install "cython<3.0.0" "buildozer==1.5.0"
 
@@ -38,6 +40,10 @@ jobs:
         buildozer -v android debug
 
     - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-release
+        path: bin/*.apk
       uses: actions/upload-artifact@v4
       with:
         name: app-release
