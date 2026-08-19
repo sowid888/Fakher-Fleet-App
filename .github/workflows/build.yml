@@ -35,7 +35,7 @@ jobs:
       env:
         APP_ALLOW_RUNNING_AS_ROOT: 1
       run: |
-        buildozer -v android debug
+        yes | buildozer -v android debug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
