@@ -19,7 +19,10 @@ source.include_exts = py,png,jpg,kv,atlas,json,db
 version = 1.0.0
 
 # (list) Application requirements
-requirements = python3,kivy==2.3.0,cython
+requirements = python3==3.11.5,kivy==2.3.0,cython<3.0.0
+
+# (str) Custom p4a branch (تحديد الفرع المستقر لإلغاء Python 3.14)
+p4a.branch = release-2024.01.21
 
 # (str) Supported orientations
 orientation = portrait
