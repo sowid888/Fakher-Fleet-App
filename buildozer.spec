@@ -19,7 +19,7 @@ source.include_exts = py,png,jpg,kv,atlas,json,db
 version = 1.0.0
 
 # (list) Application requirements
-requirements = python3==3.11.5,kivy==2.3.0,cython==0.29.33
+requirements = python3,kivy==2.3.0,cython==0.29.33
 
 # (str) Supported orientations
 orientation = portrait
