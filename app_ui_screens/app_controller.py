@@ -1,53 +1,133 @@
-# مجلد: app_ui_screens / app_controller.py
+# -*- coding: utf-8 -*-
+"""
+منظومة فاخر السيادية الكبرى 2600 - المحرك التنفيذي التفاعلي للأندرويد
+تاريخ التحديث: أغسطس 2026
+"""
 
 import sys
 import os
 
-# إضافة المجلد الحالي للمسارات لضمان اختفاء أي تحذير برتقالي
+# إضافة المسار الحالي لضمان استيراد الوحدات
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-try:
-    from login_screen import DriverLoginScreen
-    from app_main_ui import AppMainUI
-    from camera_odometer_ui import CameraOdometerUI
-    from fault_audio_reporting_ui import FaultAndAudioReportingUI
-    from messages_inbox_ui import MessagesInboxUI
-except Exception:
-    pass
+from kivy.app import App
+from kivy.uix.gridlayout import GridLayout
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.label import Label
+from kivy.uix.popup import Popup
+from kivy.core.text import LabelBase
 
-class FleetAppController:
-    def __init__(self):
-        self.login_system = DriverLoginScreen()
-        self.current_session = None
-        self.main_ui = None
-        self.camera_ui = None
+# -------------------------------------------------------------
+# 1. إعداد الخط العربي ومعالجة الاتجاهات
+# -------------------------------------------------------------
+# البحث عن ملف الخط العربي في المجلد المباشر للمشروع
+FONT_NAME = "arial.ttf"
+FONT_PATH = os.path.join(os.path.dirname(__file__), FONT_NAME)
 
-    def start_app(self, driver_name, phone_pwd, vehicle_id):
-        """1. تشغيل التطبيق وتسجيل الدخول"""
-        login_res = self.login_system.process_login(driver_name, phone_pwd, vehicle_id)
-        if login_res["success"]:
-            self.current_session = login_res["session"]
-            self.main_ui = AppMainUI(
-                truck_id=self.current_session["assigned_vehicle_id"],
-                driver_name=self.current_session["driver_name"]
-            )
-            self.camera_ui = CameraOdometerUI(
-                truck_id=self.current_session["assigned_vehicle_id"],
-                chassis_number=self.current_session["chassis_number"]
-            )
-            return f"✅ تم تسجيل الدخول بنجاح! مرحباً {driver_name}"
-        return login_res["message"]
+if os.path.exists(FONT_PATH):
+    LabelBase.register(name="ArabicFont", fn_regular=FONT_PATH)
+    DEFAULT_FONT = "ArabicFont"
+else:
+    DEFAULT_FONT = "Roboto"  # خط افتراضي في حال عدم وجود الملف
 
-    def navigate_menu(self, button_number):
-        """2. التنقل بين الواجهات بحسب خيارات السائق"""
-        if not self.current_session:
-            return "❌ يرجى تسجيل الدخول أولاً."
+def ar(text):
+    """ دالة معالجة النصوص العربية وتشكيل الحروف """
+    try:
+        import arabic_reshaper
+        from bidi.algorithm import get_display
+        reshaped = arabic_reshaper.reshape(str(text))
+        return get_display(reshaped)
+    except Exception:
+        return str(text)
+
+# -------------------------------------------------------------
+# 2. الواجهة الرسومية التفاعلية لمنظومة 2600
+# -------------------------------------------------------------
+class FakherFleetUI(BoxLayout):
+    def __init__(self, **kwargs):
+        super().__init__(orientation='vertical', spacing=10, padding=10, **kwargs)
         
-        return self.main_ui.on_button_click(button_number)
+        # الشريط العلوي الرئيسي
+        header = Label(
+            text=ar("منظومة فاخر 2600 - الأسطول الموحد"),
+            font_size='20sp',
+            font_name=DEFAULT_FONT,
+            size_hint_y=0.1,
+            color=(0.2, 0.7, 1, 1)
+        )
+        self.add_widget(header)
 
-# --- تجربة الربط الشامل ---
+        # شبكة الأزرار للشاحنات والسيارات (40 مربع تفاعلي)
+        grid = GridLayout(cols=4, spacing=8, size_hint_y=0.9)
+        
+        for i in range(1, 41):
+            btn_text = ar(f"مركبة {i}")
+            btn = Button(
+                text=f"{btn_text}\n{i}",
+                font_name=DEFAULT_FONT,
+                font_size='14sp',
+                background_color=(0.1, 0.4, 0.3, 1),
+                color=(1, 1, 1, 1)
+            )
+            # ربط الحدث عند الضغط على المربع لتنفيذ أمر حقيقي
+            btn.bind(on_press=lambda instance, vehicle_num=i: self.on_vehicle_click(vehicle_num))
+            grid.add_widget(btn)
+
+        self.add_widget(grid)
+
+    def on_vehicle_click(self, vehicle_id):
+        """ الدالة التنفيذية التي تعمل فور الضغط على أي مربع """
+        content = BoxLayout(orientation='vertical', padding=15, spacing=10)
+        
+        # نصوص وتفاصيل داخل النافذة المنبثقة
+        info_label = Label(
+            text=ar(f"بيانات المركبة رقم: {vehicle_id}\nالحالة: جاهزة للعمل\nالعداد: 125,400 كم"),
+            font_name=DEFAULT_FONT,
+            font_size='16sp',
+            halign='center'
+        )
+        content.add_widget(info_label)
+
+        # زر إدخال وقود / ديزل
+        btn_fuel = Button(
+            text=ar("⛽ تسجيل صرف ديزل"),
+            font_name=DEFAULT_FONT,
+            size_hint_y=0.3,
+            background_color=(0.2, 0.6, 0.9, 1)
+        )
+        btn_fuel.bind(on_press=lambda x: self.process_action(vehicle_id, "تسجيل وقود"))
+        content.add_widget(btn_fuel)
+
+        # زر توثيق صيانة
+        btn_maint = Button(
+            text=ar("🛠️ طلب صيانة عاجلة"),
+            font_name=DEFAULT_FONT,
+            size_hint_y=0.3,
+            background_color=(0.9, 0.4, 0.2, 1)
+        )
+        btn_maint.bind(on_press=lambda x: self.process_action(vehicle_id, "طلب صيانة"))
+        content.add_widget(btn_maint)
+
+        # إغلاق النافذة
+        popup = Popup(
+            title=ar(f"إدارة المركبة {vehicle_id}"),
+            title_font=DEFAULT_FONT,
+            content=content,
+            size_hint=(0.85, 0.6)
+        )
+        popup.open()
+
+    def process_action(self, vehicle_id, action_type):
+        """ تنفيذ الإجراء وتحويله للبيانات """
+        print(f"تم تنفيذ إجراء ({action_type}) للمركبة {vehicle_id}")
+
+# -------------------------------------------------------------
+# 3. مشغل التطبيق الأساسي
+# -------------------------------------------------------------
+class FakherFleetApp(App):
+    def build(self):
+        return FakherFleetUI()
+
 if __name__ == "__main__":
-    controller = FleetAppController()
-    print(controller.start_app("محمد علي", "0501234567", "2600-001"))
-    print("\n[السائق ضغط على زر الوقود]:")
-    print(controller.navigate_menu(2))
+    FakherFleetApp().run()
