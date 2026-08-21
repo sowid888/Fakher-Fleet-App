@@ -159,7 +159,8 @@ class FakherSovereignApp2600:
 
     # 3. تبويب صيانة سيارات الإدارة
     def build_car_maintenance_tab(self):
-        frTrue, padx=15, pady=15)
+        frame_cars = tk.LabelFrame(self.tab_cars, text=" سجلات صيانة وقطع غيار سيارات الإدارة ", font=("Arial", 12, "bold"), bg="#1e293b", fg="#f1f5f9", labelanchor="ne")
+        frame_cars.pack(fill="both", expand=True, padx=15, pady=15)
         
         lbl_info = tk.Label(frame_cars, text="🛠️ وحدة توثيق قطع الغيار، فحص الإطارات والبطاريات، وحساب الإهلاك المسافي", font=("Arial", 11, "bold"), bg="#1e293b", fg="#ea580c")
         lbl_info.pack(pady=10)
